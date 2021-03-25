@@ -1,6 +1,15 @@
 # zanzo-common
 <h1>Common library for Zanzo Studios game projects</h1>
 
+<h2>Overview</h2>
+There are two main motivations for the overall design of this code:
+
+1. Abstract the concept of "active" from Unity's behavior on calling GameObject.SetActive()
+2. Facilitate the pooling of categories of objects
+
+It is important to note that flexibility is not a primary goal for this design. I adapt my game designs to fit to this pattern.
+
+
 The focus of this code review will be 3 files:
 
 * **ZanzoObject** - Replaces MonoBehaviour as the base class of all components
