@@ -3,16 +3,14 @@
 
 The focus of this code review will be 3 files:
 
-* ZanzoObject: Replaces MonoBehaviour as the base class of all components
-* ResourceDomain: Holds collections of ZanzoObject pools
-* ZamzoObjectManager: Wrapper class for ResourceDomain that also tracks all currently active objects
+1. **ZanzoObject** Replaces MonoBehaviour as the base class of all components
+2. **ResourceDomain** Holds collections of ZanzoObject pools
+3. **ZamzoObjectManager** Wrapper class for ResourceDomain that also tracks all currently active objects
 
 **ZanzoObject**  
 This class replaces MonoBehaviour as the subclass for all components, and has two additional purposes:
 
-1. It redefines the concept of "active" in Unity, separating out the ability to flag an object as active/inactive without modifying its gameObject.activeSelf flag. The primary reason for this is so that the object can be flagged as inactive in MonoBehaviour::Update() without causing conflicts with the physics engine.
-
-Modifying the gameObject.activeSelf flag has been abstracted into two methods, Display (true) and Hide (false). This behavior can be overridden in subclasses as needed.
+1. It redefines the concept of "active" in Unity, separating out the ability to flag an object as active/inactive without modifying its gameObject.activeSelf flag. The primary reason for this is so that the object can be flagged as inactive in MonoBehaviour::Update() without causing conflicts with the physics engine. Modifying the gameObject.activeSelf flag has been abstracted into two methods, Display (true) and Hide (false). This behavior can be overridden in subclasses as needed.
 
 2. It introduces the concept of being retained. The two methods Retain() / Release() flag the object's current state. This is used in conjunction with ResourceDomain and ZanzoObject manager to create pools of objects.
 
