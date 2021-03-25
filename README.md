@@ -27,7 +27,7 @@ This class replaces MonoBehaviour as the base class for all components, and has 
 2. It introduces the concept of being retained. The two methods Retain() / Release() flag the object's current retained state. This is used in conjunction with ResourceDomain and ZanzoObject manager to create pools of objects.
 
 **ResourceDomain**  
-This class holds pools of ZanzoObjects. It's designed to hold multiple pools but works just fine with just one. An single enum is used to access all pools, where an enum entry represents a single pool. In other words, if there is a pool of three enemies, the enum EnemyType would map to each pool like this:
+This class holds pools of ZanzoObjects. It's designed to hold multiple pools but works just fine with just one. An single enum is used to access all pools, where an enum entry represents a single pool. In other words, if there are pools for three different types of enemies, the enum EnemyType would map to each pool like this:
 
 * EnemyType.One => Enemy 1
 * EnemyType.Two => Enemy 2
