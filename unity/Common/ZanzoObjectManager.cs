@@ -174,18 +174,18 @@ namespace Zanzo.Common
         // +---------------------------------------------------
         // + Event Handlers
         // +---------------------------------------------------
-        public virtual void OnResourceActivated(ZanzoObject arg)
+        public virtual void OnResourceActivated(ZanzoObject target)
         {
-            // Debug.Log("ZanzoObjectManager::OnResourceActivated(" + arg + ")");
-            V res = (V)arg;
+            // Debug.Log("ZanzoObjectManager::OnResourceActivated(" + target + ")");
+            V res = (V)target;
             _activeResources.Add(res);
         }
 
-        public virtual void OnResourceDeactivated(ZanzoObject arg)
+        public virtual void OnResourceDeactivated(ZanzoObject target)
         {
-            // Debug.Log("ZanzoObjectManager::OnResourceDeactivated(" + arg + ")");
+            // Debug.Log("ZanzoObjectManager::OnResourceDeactivated(" + target + ")");
 
-            V res = (V)arg;
+            V res = (V)target;
             _activeResources.Remove(res);
         }
     }
