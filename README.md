@@ -24,10 +24,10 @@ This class replaces MonoBehaviour as the base class for all components, and has 
 
 1. It redefines the concept of "active" in Unity, separating out the ability to flag an object as active/inactive without modifying its gameObject.activeSelf flag. The primary reason for this is so that the object can be flagged as inactive in MonoBehaviour::Update() without causing conflicts with the physics engine. Modifying the gameObject.activeSelf flag has been abstracted into two methods, Display (true) and Hide (false). This behavior can be overridden in subclasses as needed.
 
-2. It introduces the concept of being retained. The two methods Retain() / Release() flag the object's current retained state. This is used in conjunction with ResourceDomain and ZanzoObject manager to create pools of objects.
+2. It introduces the concept of being retained. The two methods Retain() / Release() flag the object's current retained state. This is used in conjunction with ResourceDomain and ZanzoObjectManager to create pools of objects.
 
 **ResourceDomain**  
-This class holds pools of ZanzoObjects. It's designed to hold multiple pools but works just fine with just one. An single enum is used to access all pools, where an enum entry represents a single pool. In other words, if there is a pool of three enemies, the enum EnemyType would map to each pool like this:
+This class holds pools of ZanzoObjects. It's designed to hold multiple pools but works just fine with just one. An single enum is used to access all pools, where an enum entry represents a single pool. In other words, if there are pools for three different types of enemies, the enum EnemyType would map to each pool like this:
 
 * EnemyType.One => Enemy 1
 * EnemyType.Two => Enemy 2
@@ -62,6 +62,6 @@ ZanzoObjectManager.InitializeResource(Enemy enemy)
 Custom behavior on object activation/deactivation can be handled by overriding the two methods:
 
 ```csharp
-public virtual void OnResourceActivated(ZanzoObject arg)
-public virtual void OnResourceDeactivated(ZanzoObject arg)
+public virtual void OnResourceActivated(ZanzoObject target)
+public virtual void OnResourceDeactivated(ZanzoObject target)
 ```
