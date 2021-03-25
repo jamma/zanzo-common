@@ -3,9 +3,12 @@
 
 The focus of this code review will be 3 files:
 
-1. **ZanzoObject** Replaces MonoBehaviour as the base class of all components
-2. **ResourceDomain** Holds collections of ZanzoObject pools
-3. **ZamzoObjectManager** Wrapper class for ResourceDomain that also tracks all currently active objects
+* **ZanzoObject** Replaces MonoBehaviour as the base class of all components
+  * https://github.com/jamma/zanzo-common/blob/main/unity/Common/ZanzoObject.cs
+* **ResourceDomain** Holds collections of ZanzoObject pools
+  * https://github.com/jamma/zanzo-common/blob/main/unity/Common/ResourceDomain.cs
+* **ZamzoObjectManager** Wrapper class for ResourceDomain that also tracks all currently active objects
+  * https://github.com/jamma/zanzo-common/blob/main/unity/Common/ZanzoObjectManager.cs
 
 **ZanzoObject**  
 This class replaces MonoBehaviour as the subclass for all components, and has two additional purposes:
