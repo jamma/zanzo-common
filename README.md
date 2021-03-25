@@ -44,13 +44,10 @@ Pools can be initialized by passing a key (enum entry), Unity prefab, and int re
 ZanzoObjectManager.InitializePool(EnemyType.One, enemyOnePrefab, 25);
 ```
 
-Object initialization can be customized by overriding the method:
+Object initialization can be customized by overriding the method below, which is called soon after the object's instantiation:
 
 ```csharp
 ZanzoObjectManager.InitializeResource(Enemy enemy)
-{
-  // Insert custom initialization code
-}
 ```
 
 Custom behavior on object activation/deactivation can be handled by overriding the two methods:
