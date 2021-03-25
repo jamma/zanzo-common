@@ -4,9 +4,9 @@
 // + Author: Michael McClenney at 20:08 on 2021/03/08
 // +
 // + Description:
-// +    ZanzoObjectManager works in conjunction with ResourceDomains and ZanzoObjects to manage object pooling.
+// +    ZanzoObjectManager works in conjunction with ZanzoObject and ResourceDomain to manage object pooling.
 // +    ZanzoObjectManager is mostly a wrapper around a ResourceDomain instance, so please refer to its
-// +    documentation on how the object pool is set up and used.
+// +    documentation for more information on how the object pool is set up and used.
 // +
 // +    Populating a Manager:
 // +        Items managed by this class should be mapped to values in an enum (one enum entry per type).
@@ -37,12 +37,9 @@
 // +            var enemy = ZanzoObjectManager::Retain(EnemyType.One) as Todori;
 // +
 // +   Releasing an Object:
-// +        Releasing an object is done by calling Release() on the object itself,
-// +        there is purposely no corresponding Release() method in the manager:
+// +        Releasing an object is done by calling Release() and passing the object:
 // +
-// +            enemy.Release()
-// +
-// +        A released object will automatically notify its manager.
+// +            ZanzoObjectManager::Release(enemy)
 // +
 // +    Active Object Tracking:
 // +        On top of retain/release functionality, managers also keep track of active objects.
@@ -149,8 +146,6 @@ namespace Zanzo.Common
                 // Don't add event handlers until after the object has been initialized.
                 // This allows the object to either start activated / deactivated without
                 // unnecessarily notifying those event listeners (e.g. this).
-                cmp.Retained += OnResourceRetained;
-                cmp.Released += OnResourceReleased;
                 cmp.Activated += OnResourceActivated;
                 cmp.Deactivated += OnResourceDeactivated;
 
@@ -159,9 +154,7 @@ namespace Zanzo.Common
         }
 
         // Callback that can be overridden to provide custom initialization functionality.
-        public virtual void InitializeResource(V res)
-        {
-        }
+        public virtual void InitializeResource(V res) {}
 
         public V Retain(K key)
         {
@@ -170,26 +163,20 @@ namespace Zanzo.Common
             return res;
         }
 
-        // +---------------------------------------------------
-        // + Event Handlers
-        // +---------------------------------------------------
-        public virtual void OnResourceRetained(ZanzoObject arg)
+        public void Release(V res)
         {
-            // V res = (V)arg;
-        }
-
-        public virtual void OnResourceReleased(ZanzoObject arg)
-        {
-            // Debug.Log("ZanzoObjectManager::OnResourceActivated(" + arg + ")");
-            V res = (V)arg;
-
             if (res.IsActive)
             {
                 Debug.LogWarning("ZanzoObjectManager::OnResourceReleased() - releasing an object without deactivating it: " + res);
                 _activeResources.Remove(res);
             }
+
+            _resourceDomain.Release(res);
         }
 
+        // +---------------------------------------------------
+        // + Event Handlers
+        // +---------------------------------------------------
         public virtual void OnResourceActivated(ZanzoObject arg)
         {
             // Debug.Log("ZanzoObjectManager::OnResourceActivated(" + arg + ")");
@@ -203,7 +190,6 @@ namespace Zanzo.Common
 
             V res = (V)arg;
             _activeResources.Remove(res);
-            // _resourceDomain.Release(res);
         }
     }
 }

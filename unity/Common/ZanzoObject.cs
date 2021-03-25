@@ -25,8 +25,6 @@
 // +
 // +
 // +    3.  All ZanzoObjects emit events based on the above states:
-// +            1. Retained
-// +            2. Released
 // +            3. Activated
 // +            4. Deactivated
 // +
@@ -34,7 +32,8 @@
 // +            1. Retained
 // +            2. Activated
 // +            3. Deactivated
-// +            4. Released
+// +            4. Possible custom state
+// +            5. Released
 // +
 // +        The order can be rearranged as long as care is taken in its respective manager, however.
 // +-------------------------------------------------------------------------------------------------------------------
@@ -54,8 +53,6 @@ namespace Zanzo.Common
         // + Events & Delegates
         // +---------------------------------------------------
         public delegate void ZanzoObjectNotify(ZanzoObject res);
-        public event ZanzoObjectNotify Retained;
-        public event ZanzoObjectNotify Released;
         public event ZanzoObjectNotify Activated;
         public event ZanzoObjectNotify Deactivated;
 
@@ -113,16 +110,17 @@ namespace Zanzo.Common
         // +---------------------------------------------------
         // NOTE: My gut tells me that Retain / Release / Activate / Deactivate should NOT be virtual,
         //       but if the need arises reconsider this. Currently, I cannot imagine a scenario where it makes sense.
+        //       Also, and probably more importantly, Retain / Release should probably only be callable to classes
+        //       within Zanzo.Common. Exposing this globally is a bad idea, but I'm not sure if there's a way to 
+        //       accomplish what I really want in C# (I want the functionality of the C++ friend keyword).
         public void Retain()
         {
             _isRetained = true;
-            Retained?.Invoke(this);
         }
 
         public void Release()
         {
             _isRetained = false;
-            Released?.Invoke(this);
         }
 
         public void Activate()
