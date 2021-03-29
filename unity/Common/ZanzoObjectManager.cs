@@ -27,7 +27,7 @@
 // +        this must be taken into account in the managed object's design.
 // +
 // +   Retaining an Object:
-// +        Objects can be retained by calling Retain with the propery Enum entry:
+// +        Objects can be retained by calling Retain with the proper Enum entry:
 // +
 // +            var enemy = ZanzoObjectManager::Retain(EnemyType.One);
 // +
@@ -57,18 +57,33 @@ using UnityEngine;
 
 namespace Zanzo.Common
 {
-    // +---------------------------------------------------------------------------------------------------------------
+    // +-------------------------------------------------------------------------------
     // + Class: ZanzoObjectManager
     // + Description:
     // +    Insert Description Here
-    // +---------------------------------------------------------------------------------------------------------------
+    // +-------------------------------------------------------------------------------
     public class ZanzoObjectManager<K, V> : ZanzoObject where K : System.Enum where V : ZanzoObject
     {
-        // Private Members  -------------------------------------------------------------------------------------------
+        // +-----------------------------------------------------------------------
+        // + Data Members
+        // +-----------------------------------------------------------------------
+        // +---------------------------------------------------
+        // + Static / Constants
+        // +---------------------------------------------------
+
+        // +---------------------------------------------------
+        // + Private Members
+        // +---------------------------------------------------
         private ResourceDomain<K, V> _resourceDomain = new ResourceDomain<K, V>();
         private List<V> _activeResources = new List<V>();
 
-        // Properties  ------------------------------------------------------------------------------------------------
+        // +---------------------------------------------------
+        // + Public Members
+        // +---------------------------------------------------
+        // +-------------------------------
+        // +-------------------------------
+        // + Properties
+        // +-------------------------------
         public ResourceDomain<K, V> ResourceDomain
         {
             get
@@ -93,7 +108,12 @@ namespace Zanzo.Common
             }
         }
 
-        // C'tor & Init Methods  --------------------------------------------------------------------------------------
+        // +-----------------------------------------------------------------------
+        // + Class Methods
+        // +-----------------------------------------------------------------------
+        // +---------------------------------------------------
+        // + C'tor & Init Methods
+        // +---------------------------------------------------
         public void InitializePool(K key, GameObject prefab, int size)
         {
             if (_resourceDomain.ContainsPool(key))
@@ -133,11 +153,10 @@ namespace Zanzo.Common
         // Callback that can be overridden to provide custom initialization functionality.
         public virtual void InitializeResource(V res) {}
 
-        // Component Functionality  -----------------------------------------------------------------------------------
         public V Retain(K key)
         {
             var res = _resourceDomain.Retain(key);
-            res.Reinitialize();
+            res.Reset();
             return res;
         }
 
@@ -145,14 +164,16 @@ namespace Zanzo.Common
         {
             if (res.IsActive)
             {
-                Debug.LogWarning("ZanzoObjectManager::OnResourceReleased() - releasing an object without deactivating it.", res);
+                Debug.LogWarning("ZanzoObjectManager::OnResourceReleased() - releasing an object without deactivating it: " + res);
                 _activeResources.Remove(res);
             }
 
             _resourceDomain.Release(res);
         }
 
-        // Event Handlers  --------------------------------------------------------------------------------------------
+        // +---------------------------------------------------
+        // + Event Handlers
+        // +---------------------------------------------------
         public virtual void OnResourceActivated(ZanzoObject target)
         {
             // Debug.Log("ZanzoObjectManager::OnResourceActivated(" + target + ")");
