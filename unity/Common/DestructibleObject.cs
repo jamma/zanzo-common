@@ -114,9 +114,9 @@ namespace Zanzo.Common
             DestructBegin?.Invoke(this);
         }
 
-        public override void Reset()
+        public override void Reinitialize()
         {
-            base.Reset();
+            base.Reinitialize();
             _destructibleObjectState = DestructibleObjectState.Intact;
             SetToIntactState();
         }
