@@ -9,7 +9,7 @@
 
 using UnityEngine;
 
-using Zanzo.HiLi.Enum;
+using Zanzo.Common.Enum;
 
 namespace Zanzo.Common
 {

@@ -156,7 +156,7 @@ namespace Zanzo.Common
         public V Retain(K key)
         {
             var res = _resourceDomain.Retain(key);
-            res.Reset();
+            res.Reinitialize();
             return res;
         }
 
