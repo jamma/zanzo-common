@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration name="enum">
+    <profile name="default">
+
+        <!--
+            Note: All Zanzo Object states, as well as states for all of its subclasses
+                  must be defined here. Maybe not the best design, but it makes things
+                  a LOT simpler.
+        -->
+        <enum name="zanzo_object_state">
+            <entry name="active" />
+            <entry name="inactive" />
+            <entry name="destruct" />
+        </enum>
+
+    </profile>
+</configuration>
