@@ -10,30 +10,30 @@
 namespace Zanzo.Common.Enum
 {
     // +----------------------------------------------------------------------------
-    // + Enum: DestructibleObjectState
+    // + Enum: ZanzoObjectState
     // +----------------------------------------------------------------------------
-    public enum DestructibleObjectState: int
+    public enum ZanzoObjectState: int
     {
-        DestructBegin = 32481,
-        DestructEnd = 32482,
-        Intact = 32483,
+        Active = 1,
+        Inactive,
+        Destructing
     }
 
-    public static partial class DestructibleObjectStateExtensions
+    public static partial class ZanzoObjectStateExt
     {
-        public static bool IsDestructBegin(this DestructibleObjectState entry)
+        public static bool IsActive(this ZanzoObjectState entry)
         {
-            return entry == DestructibleObjectState.DestructBegin;
+            return entry == ZanzoObjectState.Active;
         }
 
-        public static bool IsDestructEnd(this DestructibleObjectState entry)
+        public static bool IsInactive(this ZanzoObjectState entry)
         {
-            return entry == DestructibleObjectState.DestructEnd;
+            return entry == ZanzoObjectState.Inactive;
         }
 
-        public static bool IsIntact(this DestructibleObjectState entry)
+        public static bool IsDestructing(this ZanzoObjectState entry)
         {
-            return entry == DestructibleObjectState.Intact;
+            return entry == ZanzoObjectState.Destructing;
         }
     }
 }

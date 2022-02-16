@@ -47,6 +47,8 @@
 
 using UnityEngine;
 
+using Zanzo.Common.Enum;
+
 namespace Zanzo.Common
 {
     // +---------------------------------------------------------------------------------------------------------------
@@ -61,29 +63,63 @@ namespace Zanzo.Common
         public event ZanzoObjectNotify Activated;
         public event ZanzoObjectNotify Deactivated;
 
+        // Static / Constants  ----------------------------------------------------------------------------------------
+        public const string ActiveNodeName = "Active";
+        public const string InactiveNodeName = "Inactive";
+
         // Private Members  -------------------------------------------------------------------------------------------
-        private bool _isActivated = false;
-        private bool _isRetained = false;
+        // private bool _isActivated = false;
+        // private ZanzoObjectState State = ZanzoObjectState.Inactive;
+        // private bool _isRetained = false;
+
+        // Inspector / Editor Properties  -----------------------------------------------------------------------------
+        [SerializeField] private GameObject _activeNode;
+        [SerializeField] private GameObject _inactiveNode;
 
         // Properties  ------------------------------------------------------------------------------------------------
-        public bool IsActive
-        {
-            get
-            {
-                return _isActivated;
-            }
-        }
+        // public bool IsActive
+        // {
+        //     get
+        //     {
+        //         return _isActivated;
+        //     }
+        // }
+        // public ZanzoObjectState State
+        // {
+        //     get
+        //     {
+        //         return _state;
+        //     }
+        // }
+        public ZanzoObjectState State { get; protected set; } = ZanzoObjectState.Inactive;
+        public bool IsRetained { get; private set; } = false;
 
-        public bool IsRetained
-        {
-            get
-            {
-                return _isRetained;
-            }
-        }
+        // public bool IsRetained
+        // {
+        //     get
+        //     {
+        //         return _isRetained;
+        //     }
+        // }
+
+        public GameObject ActiveNode { get { return _activeNode; } }
+        public GameObject InactiveNode { get { return _inactiveNode; } }
+
+        // public GameObject InactiveNode
+        // {
+        //     get
+        //     {
+        //         return _inactiveNode;
+        //     }
+        // }
 
         // C'tor & Init Methods  --------------------------------------------------------------------------------------
-        public virtual void Initialize() {}
+        public virtual void Initialize()
+        {
+            _activeNode = transform.Find(ActiveNodeName).gameObject;
+            _inactiveNode = transform.Find(InactiveNodeName).gameObject;
+
+        }
         public virtual void Reinitialize() {}
 
         // Component Functionality  -----------------------------------------------------------------------------------
@@ -95,23 +131,27 @@ namespace Zanzo.Common
         //       accomplish what I really want in C# (I want the functionality of the C++ friend keyword).
         public void Retain()
         {
-            _isRetained = true;
+            IsRetained = true;
         }
 
         public void Release()
         {
-            _isRetained = false;
+            IsRetained = false;
         }
 
-        public void Activate()
+        public virtual void Activate()
         {
-            _isActivated = true;
+            _activeNode?.SetActive(true);
+            _inactiveNode?.SetActive(false);
+            State = ZanzoObjectState.Active;
             Activated?.Invoke(this);
         }
 
-        public void Deactivate()
+        public virtual void Deactivate()
         {
-            _isActivated = false;
+            _activeNode?.SetActive(false);
+            _inactiveNode?.SetActive(true);
+            State = ZanzoObjectState.Inactive;
             Deactivated?.Invoke(this);
         }
 

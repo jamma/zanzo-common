@@ -55,6 +55,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Zanzo.Common.Enum;
+
 namespace Zanzo.Common
 {
     // +-------------------------------------------------------------------------------
@@ -64,49 +66,26 @@ namespace Zanzo.Common
     // +-------------------------------------------------------------------------------
     public class ZanzoObjectManager<K, V> : ZanzoObject where K : System.Enum where V : ZanzoObject
     {
-        // +-----------------------------------------------------------------------
-        // + Data Members
-        // +-----------------------------------------------------------------------
-        // +---------------------------------------------------
-        // + Static / Constants
-        // +---------------------------------------------------
+        // Data Members  ----------------------------------------------------------------------------------------------
 
-        // +---------------------------------------------------
-        // + Private Members
-        // +---------------------------------------------------
-        private ResourceDomain<K, V> _resourceDomain = new ResourceDomain<K, V>();
+        // Properties  ----------------------------------------------------------------------------
+        // public ResourceDomain<K, V> ResourceDomain { get { return _resourceDomain; } }
+        public ResourceDomain<K, V> ResourceDomain { get; private set; }
+        public IReadOnlyList<V> ActiveResources { get { return _activeResources; } }
+
+        // public IReadOnlyList<V> ActiveResources
+        // {
+        //     get
+        //     {
+        //         return _activeResources;
+        //     }
+        // }
+
+        public bool HasActiveResources { get { return _activeResources.Count > 0; } }
+
+        // Private Members  -----------------------------------------------------------------------
+        // private ResourceDomain<K, V> _resourceDomain = new ResourceDomain<K, V>();
         private List<V> _activeResources = new List<V>();
-
-        // +---------------------------------------------------
-        // + Public Members
-        // +---------------------------------------------------
-        // +-------------------------------
-        // +-------------------------------
-        // + Properties
-        // +-------------------------------
-        public ResourceDomain<K, V> ResourceDomain
-        {
-            get
-            {
-                return _resourceDomain;
-            }
-        }
-
-        public IReadOnlyList<V> ActiveResources
-        {
-            get
-            {
-                return _activeResources;
-            }
-        }
-
-        public bool HasActiveResources
-        {
-            get
-            {
-                return _activeResources.Count > 0;
-            }
-        }
 
         // +-----------------------------------------------------------------------
         // + Class Methods
@@ -114,9 +93,15 @@ namespace Zanzo.Common
         // +---------------------------------------------------
         // + C'tor & Init Methods
         // +---------------------------------------------------
+        // public ZanzoObjectManager<K, V> : ZanzoObject where K : System.Enum where V : ZanzoObject
+        public ZanzoObjectManager()
+        {
+            ResourceDomain = new ResourceDomain<K, V>();
+        }
+
         public void InitializePool(K key, GameObject prefab, int size)
         {
-            if (_resourceDomain.ContainsPool(key))
+            if (ResourceDomain.ContainsPool(key))
             {
                 Debug.LogWarning("ZanzoObjectManager::InitializePool(): Cannot initialize pool, one is already present for key: " + key);
                 return;
@@ -128,7 +113,7 @@ namespace Zanzo.Common
                 return;
             }
 
-            _resourceDomain.CreatePool(key);
+            ResourceDomain.CreatePool(key);
 
             for (int cnt = 0; cnt < size; ++cnt)
             {
@@ -146,7 +131,7 @@ namespace Zanzo.Common
                 cmp.Activated += OnResourceActivated;
                 cmp.Deactivated += OnResourceDeactivated;
 
-                _resourceDomain.AddResource(key, cmp);
+                ResourceDomain.AddResource(key, cmp);
             }
         }
 
@@ -155,20 +140,20 @@ namespace Zanzo.Common
 
         public V Retain(K key)
         {
-            var res = _resourceDomain.Retain(key);
+            var res = ResourceDomain.Retain(key);
             res.Reinitialize();
             return res;
         }
 
         public void Release(V res)
         {
-            if (res.IsActive)
+            if (res.State.IsActive())
             {
                 Debug.LogWarning("ZanzoObjectManager::OnResourceReleased() - releasing an object without deactivating it: " + res);
                 _activeResources.Remove(res);
             }
 
-            _resourceDomain.Release(res);
+            ResourceDomain.Release(res);
         }
 
         // +---------------------------------------------------
