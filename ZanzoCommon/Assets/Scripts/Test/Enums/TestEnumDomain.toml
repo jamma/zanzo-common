@@ -1,0 +1,10 @@
+class = 'TestEnumDomain'
+namespace = 'Zanzo.Common.Config.Test'
+
+[TestEnum1]
+[TestEnum1.Value1]
+[TestEnum1.Value2]
+[TestEnum1.Value3]
+value = 3290
+
+

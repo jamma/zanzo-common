@@ -1,0 +1,9 @@
+.DS_Store
+
+
+### FMOD / Music / Audio Stuff
+Audio/Background Track/Export
+Audio/FMOD/Pirouette/Build/*
+Audio/FMOD/Pirouette/**/*.cache
+Audio/FMOD/Pirouette/**/*.user
+###

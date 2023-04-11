@@ -10,6 +10,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Zanzo.Common.Enum;
+
 namespace Zanzo.Common
 {
     // +-------------------------------------------------------------------------------
@@ -19,62 +21,55 @@ namespace Zanzo.Common
     // +-------------------------------------------------------------------------------
     public abstract class GameplayObject : ZanzoObject
     {
-        // +-----------------------------------------------------------------------
-        // + Data Members
-        // +-----------------------------------------------------------------------
-        // +---------------------------------------------------
-        // + Static / Constants
-        // +---------------------------------------------------
+        // Data Members  --------------------------------------------------------------------------
+        // Static / Constants  ------------------------------------------------
+        public const string ActiveNodeName = "Active";
+        public const string InactiveNodeName = "Inactive";
 
-        // +---------------------------------------------------
-        // + Private Members
-        // +---------------------------------------------------
+        // Private Members  ---------------------------------------------------
         private Rigidbody2D _rigidbody;
         private List<Collider2D> _colliders;
 
-        // +---------------------------------------------------
-        // + Public Members
-        // +---------------------------------------------------
-        // +-------------------------------
-        // + Inspector / Editor Properties
-        // +-------------------------------
+        // Inspector / Editor Properties  -------------------------------------
+        [SerializeField] private GameObject _activeNode;
+        [SerializeField] private GameObject _inactiveNode;
 
-        // +-------------------------------
-        // + Properties
-        // +-------------------------------
-        public Rigidbody2D Rigidbody
-        {
-            get
-            {
-                return _rigidbody;
-            }
-        }
+        // Properties  --------------------------------------------------------
+        public Rigidbody2D Rigidbody { get { return _rigidbody; } }
+        public List<Collider2D> Colliders { get { return _colliders; } }
+        public GameObject ActiveNode { get { return _activeNode; } }
+        public GameObject InactiveNode { get { return _inactiveNode; } }
 
-        public List<Collider2D> Colliders
-        {
-            get
-            {
-                return _colliders;
-            }
-        }
-
-        // +-----------------------------------------------------------------------
-        // + Class Methods
-        // +-----------------------------------------------------------------------
-        // +---------------------------------------------------
-        // + C'tor & Init Methods
-        // +---------------------------------------------------
+        // Class Methods  -------------------------------------------------------------------------
+        // C'tor & Init Methods  ----------------------------------------------
         public override void Initialize()
         {
             base.Initialize();
 
             _rigidbody = GetComponent<Rigidbody2D>();
             _colliders = new List<Collider2D>(GetComponents<Collider2D>());
+
+            if (_activeNode == null) _activeNode = transform.Find(ActiveNodeName).gameObject;
+            if (_inactiveNode == null) _inactiveNode = transform.Find(InactiveNodeName).gameObject;
         }
 
-        // +---------------------------------------------------
-        // + Component Functionality
-        // +---------------------------------------------------
+        // Component Functionality  -------------------------------------------
+        public override void Activate()
+        {
+
+            _activeNode?.SetActive(true);
+            _inactiveNode?.SetActive(false);
+            base.Activate();
+        }
+
+        public override void Deactivate()
+        {
+
+            _activeNode?.SetActive(false);
+            _inactiveNode?.SetActive(true);
+            base.Deactivate();
+        }
+
         public bool ContainsCollider(Collider2D cldr)
         {
             return _colliders.Contains(cldr);
