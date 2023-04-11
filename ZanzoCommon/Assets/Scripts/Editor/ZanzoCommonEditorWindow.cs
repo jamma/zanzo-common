@@ -8,6 +8,9 @@
 // +-------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 
 using UnityEngine;
 using UnityEditor;
@@ -16,6 +19,14 @@ using Zanzo.Common;
 
 namespace Zanzo.Common.Editor
 {
+    [System.Serializable]
+    public class ZanzoCommonPrefs
+    {
+        public const string PrefsKeyName = "Zanzo.Common.EditorWindowSettingsKey";
+        public string enumDefinitions = string.Empty;
+        public string enumDomainSource = string.Empty;
+    }
+
     // +---------------------------------------------------------------------------------------------------------------
     // + Class: ZanzoCommonEditorWindow
     // + Description:
@@ -23,16 +34,7 @@ namespace Zanzo.Common.Editor
     // +---------------------------------------------------------------------------------------------------------------
     public class ZanzoCommonEditorWindow : EditorWindow
     {
-        // Events & Delegates  ----------------------------------------------------------------------------------------
-        // public delegate void ZanzoObjectNotify(ZanzoObject res);
-        // public event ZanzoObjectNotify Activated;
-
         // Static / Constants  ----------------------------------------------------------------------------------------
-        // public static readonly int SomeConstant = 0;
-        // // [MenuItem("Tools/Zanzo/Generate Enums", false -1)]
-        // public static void GenerateEnums()
-        // {
-        // }
         [MenuItem("Tools/Zanzo/Generate Enums", false, 1)]
         public static void Init()
         {
@@ -41,9 +43,8 @@ namespace Zanzo.Common.Editor
         }
 
         // Private Members  -------------------------------------------------------------------------------------------
-        // private bool _somePrivateMember;
-        // [Serializable]
-        private string _enumDomainFile;
+        private bool _doEnumGeneration = false;
+        private ZanzoCommonPrefs _prefs;
 
         // Public Members  --------------------------------------------------------------------------------------------
         // public float dontDeclarePublicMembers;
@@ -52,87 +53,81 @@ namespace Zanzo.Common.Editor
         // public string unlessTheyreEditorProperties;
 
         // Properties  ------------------------------------------------------------------------------------------------
-        // public bool SomeProperty
-        // {
-        //     get
-        //     {
-        //         return _somePrivateMember;
-        //     }
-        //     set
-        //     {
-        //         _somePrivateMember = value;
-        //     }
-        // }
 
         // C'tor & Init Methods  --------------------------------------------------------------------------------------
         // public override void Initialize() {}
         // public override void Reinitialize() {}
 
         // Component Functionality  -----------------------------------------------------------------------------------
-        // public void SomeFunc()
-        // {
-        // }
-
-        private void OnEnable()
+        public virtual void OnEnable()
         {
-            // GetWindow(typeof(EnumGenWin));
+            _prefs = LoadPrefs(ZanzoCommonPrefs.PrefsKeyName);
+        }
+
+        public virtual void OnDisable()
+        {
+            SavePrefs(ZanzoCommonPrefs.PrefsKeyName, _prefs);
+        }
+
+        protected virtual void ClearPrefs()
+        {
+            _prefs = new ZanzoCommonPrefs();
+        }
+
+        private bool CanGenerateEnums()
+        {
+            return !(string.IsNullOrEmpty(_prefs.enumDefinitions) || string.IsNullOrEmpty(_prefs.enumDomainSource));
         }
 
         private void OnGUI()
         {
-            // GUILayout.Space(20);
-            // prefs.playerName = EditorGUILayout.TextField(PlayerNameLabel, prefs.playerName)?.Trim();
-            _enumDomainFile = EditorGUILayout.TextField("Enum Domain File", _enumDomainFile)?.Trim();
-            GUILayout.Button("Generate", GUILayout.Width(100));
+            _prefs.enumDefinitions = EditorGUILayout.TextField("Enum Definitions", _prefs.enumDefinitions)?.Trim();
+            _prefs.enumDomainSource = EditorGUILayout.TextField("Enum Domain Source", _prefs.enumDomainSource)?.Trim();
 
-            // var isReady = IsReadyToConvert();
-            // EditorGUI.BeginDisabledGroup(!isReady);
-            // try
-            // {
-            //     convertNow = GUILayout.Button("Import", GUILayout.Width(100));
-            // }
-            // finally
-            // {
-            //     EditorGUI.EndDisabledGroup();
-            // }
+            var isDisabled = !CanGenerateEnums();
+            EditorGUI.BeginDisabledGroup(isDisabled);
+            try
+            {
+                _doEnumGeneration = GUILayout.Button("Generate", GUILayout.Width(100));
+            }
+            finally
+            {
+                EditorGUI.EndDisabledGroup();
+            }
+
+            if (_doEnumGeneration) GenerateEnumDomain();
         }
 
-        // Unity Life-Cycle Methods  ----------------------------------------------------------------------------------
-        // Order: https://docs.unity3d.com/Manual/ExecutionOrder.html
-        // void Awake()
-        // {
-        // }
+        public ZanzoCommonPrefs LoadPrefs(string key)
+        {
+            try
+            {
+                var xml = EditorPrefs.GetString(key);
+                ZanzoCommonPrefs prefs = null;
+                if (!string.IsNullOrEmpty(xml))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(ZanzoCommonPrefs));
+                    prefs = xmlSerializer.Deserialize(new StringReader(xml)) as ZanzoCommonPrefs;
+                }
+                return prefs ?? new ZanzoCommonPrefs();
+            }
+            catch (System.Exception)
+            {
+                return new ZanzoCommonPrefs();
+            }
+        }
 
-        // void OnEnable()
-        // {
-        // }
+        public void SavePrefs(string key, ZanzoCommonPrefs prefs)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ZanzoCommonPrefs));
+            StringWriter writer = new StringWriter();
+            xmlSerializer.Serialize(writer, prefs);
+            EditorPrefs.SetString(key, writer.ToString());
+        }
 
-        // void OnDisable()
-        // {
-        // }
-
-        // void Start()
-        // {
-        // }
-
-        // void Update()
-        // {
-        // }
-
-        // void FixedUpdate()
-        // {
-        // }
-
-        // void LateUpdate()
-        // {
-        // }
-
-        // void OnApplicationQuit()
-        // {
-        // }
-
-        // void OnDisable()
-        // {
-        // }
+        private void GenerateEnumDomain()
+        {
+            Debug.Log($"Generating enum domain from: {_prefs.enumDefinitions} to src: {_prefs.enumDomainSource}");
+        }
     }
 }
