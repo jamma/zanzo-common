@@ -162,33 +162,14 @@ namespace Zanzo.Common.Editor
                 if (!isFirst) src.Append("\n\n");
                 GenerateEnum(src, enm);
                 isFirst = false;
-                // Debug.Log($"Parsing enum: {enm.Name}");
-                // var sortedEntries = enm.Entry.OrderBy(e => e.Name).ToList();
-                // foreach (var entry in sortedEntries)
-                // {
-                //     Debug.Log($"Parsing entry: {enm.Name}.{entry.Name}");
-                // }
             }
 
             GenerateEnumDomainEnd(src, enumDefs);
 
             var srcFileDir = Path.GetDirectoryName(_prefs.enumDomainSource);
             if (!File.Exists(srcFileDir)) Directory.CreateDirectory(srcFileDir);
-            // Directory.CreateDirectory(Path.GetDirectoryName(path));
 
             File.WriteAllText(_prefs.enumDomainSource, src.ToString());
-            // using (FileStream fs = File.Create(_prefs.enumDomainSource))
-            // {
-            //     // writing data in string
-            //     // string dataasstring = "data"; //your data
-            //     byte[] info = new UTF8Encoding(true).GetBytes(src.ToString());
-            //     fs.Write(info, 0, info.Length);
-
-            //     // writing data in bytes already
-            //     byte[] data = new byte[] { 0x0 };
-            //     fs.Write(data, 0, data.Length);
-            // }
-
         }
 
         private void GenerateEnumDomainBegin(StringBuilder src, EnumDefinitions enumDefs)
@@ -199,45 +180,19 @@ namespace Zanzo.Common.Editor
                 // namespaceTokens.ForEach(tkn => ConvertSnakeToPascalCase(tkn));
                 var formattedNsTokens = namespaceTokens.Select(tkn => ConvertSnakeToPascalCase(tkn)).ToList();
                 var formattedNamespace = string.Join(".", formattedNsTokens);
-                src.Append(
-$@"namespace {formattedNamespace}
-{{
-");
+                src.Append($"namespace {formattedNamespace}\n");
+                src.Append("{\n");
             }
         }
 
         private void GenerateEnum(StringBuilder src, Zanzo.Common.Config.Enum enm)
         {
-            // // +----------------------------------------------------------------------------
-            // // + Enum: ActionButtonState
-            // // +----------------------------------------------------------------------------
-            // public enum ActionButtonState: int
-            // {
-            //     Ui,
-            //     Gameplay,
-            // }
-
-            // public static partial class ActionButtonStateExt
-            // {
-            //     public static bool IsUi(this ActionButtonState entry)
-            //     {
-            //         return entry == ActionButtonState.Ui;
-            //     }
-
-            //     public static bool IsGameplay(this ActionButtonState entry)
-            //     {
-            //         return entry == ActionButtonState.Gameplay;
-            //     }
-            // }
             var formattedEnumName = ConvertSnakeToPascalCase(enm.Name);
 
             src.Append($"    // + Enum: {formattedEnumName}\n");
             src.Append($"    public enum {formattedEnumName}: int\n");
             src.Append( "    {\n");
-// // $@"    // + Enum: {formattedEnumName}
-//     public enum {formattedEnumName}: int
-//     {{
-// ");
+
             var sortedEntries = enm.Entry.OrderBy(e => e.Name).ToList();
             foreach (var entry in sortedEntries)
             {
@@ -252,20 +207,10 @@ $@"namespace {formattedNamespace}
             src.Append($"    public static partial class {enumExtClassName}\n");
             src.Append( "    {\n");
 
-
-//             src.Append(
-// $@"
-//         public static partial class {enumExtClassName}
-//         {{
-// ");
             foreach (var entry in sortedEntries)
             {
                 var formattedEntryName = ConvertSnakeToPascalCase(entry.Name);
                 src.Append($"        public static bool Is{formattedEntryName}(this {formattedEnumName} entry) => entry == {formattedEnumName}.{formattedEntryName};\n");
-//                 src.Append(
-// $"        public static bool Is{formattedEntryName}(this {formattedEnumName} entry) => entry == {formattedEnumName}.{formattedEntryName};\n");
-                // src.Append($"            {formattedEntryName},\n");
-                // Debug.Log($"Parsing entry: {enm.Name}.{entry.Name}");
             }
 
             src.Append("    }\n");
