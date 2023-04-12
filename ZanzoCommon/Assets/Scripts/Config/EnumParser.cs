@@ -35,7 +35,7 @@ namespace Zanzo.Common.Config
         public string Name { get; set; }
     }
 
-    [XmlRoot(ElementName = "enum_domain")]
+    [XmlRoot(ElementName = "enums")]
     public class EnumDefinitions
     {
         [XmlElement(ElementName = "enum")]

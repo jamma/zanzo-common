@@ -1,5 +1,192 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<enums name="enum" namespace="zanzo.pirouette">
+    <enum name="action_button_state">
+        <entry name="ui" />
+        <entry name="gameplay" />
+    </enum>
+
+    <enum name="asteroid_spawn_distance">
+        <entry name="short" />
+        <entry name="medium" />
+        <entry name="far" />
+    </enum>
+
+    <enum name="asteroid_damage_type">
+        <entry name="core" />
+        <entry name="shell" />
+    </enum>
+
+    <enum name="asteroid_type">
+        <entry name="one" />
+        <entry name="two" />
+        <entry name="three" />
+    </enum>
+
+    <enum name="bounds_type">
+        <entry name="deactivation" />
+        <entry name="screen" />
+    </enum>
+
+    <enum name="cannon_location">
+        <entry name="bow" />
+        <entry name="starboard" />
+        <entry name="stern" />
+        <entry name="port" />
+    </enum>
+
+    <enum name="cannon_type">
+        <entry name="main_cannon" />
+        <entry name="shield_cannon" />
+    </enum>
+
+    <enum name="compound_object_size">
+        <entry name="tiny" />
+        <entry name="small" />
+        <entry name="medium" />
+        <entry name="large" />
+    </enum>
+
+    <enum name="damage_source">
+        <entry name="projectile" />
+        <entry name="blast" />
+    </enum>
+
+    <enum name="sprite_deactivation_strategy">
+        <entry name="auto" />
+        <entry name="circle_bounds" />
+    </enum>
+
+    <enum name="sprite_motion_type">
+        <entry name="none" />
+        <entry name="rigidbody" />
+        <!-- <entry name="transform" /> -->
+        <entry name="tween" />
+    </enum>
+
+    <enum name="deactivation_call_type">
+        <entry name="invoke_parent_call" />
+        <entry name="suppress_parent_call" />
+    </enum>
+
+    <enum name="destruct_animation_type">
+        <entry name="projectile_collision" />
+        <entry name="small" />
+        <entry name="large" />
+    </enum>
+
+    <enum name="game_state">
+        <entry name="playing" />
+        <entry name="over" />
+    </enum>
+
+    <enum name="hud_state">
+        <entry name="title_screen" />
+        <entry name="game_over" />
+        <entry name="gameplay" />
+    </enum>
+
+    <enum name="home_base_energy_state">
+        <entry name="regular" />
+        <entry name="charged" />
+        <entry name="laser" />
+    </enum>
+
+    <enum name="palette_entry">
+        <!-- Fireflies -->
+        <!-- <entry name="red" value="" /> -->
+        <entry name="green" value="2940222" /> <!-- hex #2CDD3E -->
+        <entry name="blue" value="699903" /> <!-- hex #0AADFF -->
+        <!-- <entry name="cyan" value="16577344" /> hex #FCF340 -->
+        <entry name="magenta" value="3932721" /> <!-- hex #3C0231 -->
+        <entry name="yellow" value="16577344" /> <!-- hex #FCF340 -->
+        <entry name="orange" value="16736031" /> <!-- hex #FF5F1F -->
+        <entry name="black" value="1320" /> <!-- hex #000528 -->
+        <entry name="white" value="15464703" /> <!-- hex #EBF8FF -->
+    </enum>
+
+    <enum name="fasteroids_id">
+        <!-- Animation Stuff -->
+        <entry name="destruct_animation" />
+        <entry name="destruct_particle" />
+
+        <!-- Bounds -->
+        <entry name="bounds" />
+        <entry name="deactivation_bounds" />
+        <entry name="screen_bounds" />
+
+        <!-- Fireflies -->
+        <entry name="firefly" />
+
+        <!-- Home Base Things -->
+        <entry name="home_base" />
+        <!-- <entry name="cannon" /> -->
+        <entry name="main_cannon" />
+        <entry name="side_cannon" />
+        <entry name="projectile" />
+        <!-- <entry name="laser" /> -->
+        <entry name="home_base_projectile" />
+        <!-- <entry name="regular_shot" /> -->
+        <!-- <entry name="charged_shot" /> -->
+
+        <!-- Asteroids -->
+        <entry name="compound_asteroid" />
+        <entry name="asteroid" />
+        <!-- <entry name="asteroid_pebble" /> -->
+        <!-- <entry name="asteroid_boulder" /> -->
+
+        <!-- Space Debris -->
+        <entry name="compound_space_debris" />
+        <entry name="space_debris" />
+
+        <!-- Threat Marker -->
+        <entry name="threat_marker" />
+
+        <!-- UFO -->
+        <entry name="ufo" />
+        <entry name="ufo_projectile" />
+        <!-- <entry name="ufo_shot" /> -->
+    </enum>
+
+    <enum name="rotation_direction">
+        <entry name="clockwise" />
+        <entry name="counter_clockwise" />
+    </enum>
+
+    <enum name="screen_quadrant">
+        <entry name="one" />
+        <entry name="two" />
+        <entry name="three" />
+        <entry name="four" />
+    </enum>
+
+    <enum name="space_debris_decay">
+        <entry name="none" />
+        <entry name="one_quarter" />
+        <entry name="half" />
+        <entry name="three_quarters" />
+        <entry name="full" />
+    </enum>
+
+
+    <enum name="timer_type">
+        <entry name="home_base_projectile" />
+        <entry name="asteroid_spawn" />
+        <entry name="space_debris_spawn" />
+        <entry name="space_debris_disintegrate" />
+        <entry name="firefly_spawn" />
+        <entry name="ufo_spawn" />
+        <!-- <entry name="ufo_shot" /> -->
+    </enum>
+
+    <enum name="ufo_size">
+        <entry name="small" />
+        <entry name="large" />
+    </enum>
+</enums>
+
+
+<!--
 <enum_domain name="enum" namespace="zanzo.pirouette">
     <enum name="b_button_state">
         <entry name="gameplay" />
@@ -14,3 +201,4 @@
         <entry name="ui" />
     </enum>
 </enum_domain>
+-->
