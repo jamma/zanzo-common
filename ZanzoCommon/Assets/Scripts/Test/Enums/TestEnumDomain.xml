@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration name="enum" namespace="zanzo.pirouette">
-    <enum name="action_button_state">
+<enum_domain name="enum" namespace="zanzo.pirouette">
+    <enum name="b_button_state">
+        <entry name="gameplay" />
+        <entry name="ui" />
+    </enum>
+    <enum name="c_button_state">
         <entry name="ui" />
         <entry name="gameplay" />
     </enum>
-</configuration>
+    <enum name="a_button_state">
+        <entry name="gameplay" />
+        <entry name="ui" />
+    </enum>
+</enum_domain>

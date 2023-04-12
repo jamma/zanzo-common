@@ -36,7 +36,7 @@ namespace Zanzo.Common.Config
     }
 
     [XmlRoot(ElementName = "enum_domain")]
-    public class EnumDomain
+    public class EnumDefinitions
     {
         [XmlElement(ElementName = "enum")]
         public List<Enum> Enum { get; set; }
@@ -44,8 +44,8 @@ namespace Zanzo.Common.Config
         [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
-        [XmlAttribute(AttributeName = "value_start")]
-        public int? ValueStart { get; set; }
+        [XmlAttribute(AttributeName = "start_value")]
+        public int ValueStart { get; set; } = -1;
 
         [XmlAttribute(AttributeName = "namespace")]
         public string Namespace { get; set; }

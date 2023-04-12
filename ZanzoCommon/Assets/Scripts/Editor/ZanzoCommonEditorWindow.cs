@@ -8,6 +8,7 @@
 // +-------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -16,6 +17,7 @@ using UnityEngine;
 using UnityEditor;
 
 using Zanzo.Common;
+using Zanzo.Common.Config;
 
 namespace Zanzo.Common.Editor
 {
@@ -127,7 +129,37 @@ namespace Zanzo.Common.Editor
 
         private void GenerateEnumDomain()
         {
+            EnumDefinitions enumDefs = null;
             Debug.Log($"Generating enum domain from: {_prefs.enumDefinitions} to src: {_prefs.enumDomainSource}");
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(EnumDefinitions));
+                using (FileStream stream = new FileStream(_prefs.enumDefinitions, FileMode.Open))
+                {
+                    enumDefs = serializer.Deserialize(stream) as EnumDefinitions;
+                }
+            }
+            catch (Exception e)
+            {
+                UnityEngine.Debug.LogError("Exception loading config file: " + e);
+            }
+
+            if (enumDefs == null)
+            {
+                Debug.Log($"Error: Could not parse enums from definition file: {_prefs.enumDefinitions}");
+                return;
+            }
+
+            var sortedEnums = enumDefs.Enum.OrderBy(e => e.Name).ToList();
+            foreach (var enm in sortedEnums)
+            {
+                Debug.Log($"Parsing enum: {enm.Name}");
+                var sortedEntries = enm.Entry.OrderBy(e => e.Name).ToList();
+                foreach (var entry in sortedEntries)
+                {
+                    Debug.Log($"Parsing entry: {enm.Name}.{entry.Name}");
+                }
+            }
         }
     }
 }
